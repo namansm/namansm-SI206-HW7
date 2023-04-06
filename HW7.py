@@ -1,8 +1,7 @@
-
-# Your name:
-# Your student id:
-# Your email:
-# List who you have worked with on this project:
+# Your name: Naman Mathur
+# Your student id: 17661408
+# Your email: namansm@umich.edu
+# List who you have worked with on this project: N/A
 
 import unittest
 import sqlite3
@@ -53,7 +52,23 @@ def make_positions_table(data, cur, conn):
 #     created for you -- see make_positions_table above for details.
 
 def make_players_table(data, cur, conn):
-    pass
+    cur.execute("SELECT * FROM Positions")
+    pos_data = cur.fetchall()
+    positions = {}
+    for pos in pos_data:
+        positions[pos[1]] = pos[0]
+
+    players = data["squad"]
+    cur.execute("CREATE TABLE IF NOT EXISTS Players (id INTEGER PRIMARY KEY, name TEXT, position_id INTEGER, birthyear INTEGER, nationality TEXT)")
+
+    for player in players:
+            id = player["id"]
+            name = player["name"]
+            pos = positions[player["position"]]
+            year = int(player["dateOfBirth"][0:4])
+            nation = player["nationality"]
+            cur.execute("INSERT OR IGNORE INTO Players (id, name, position_id, birthyear, nationality) VALUES (?,?,?,?,?)", (id, name, pos, year, nation))
+    conn.commit()
 
 ## [TASK 2]: 10 points
 # Finish the function nationality_search
@@ -205,21 +220,21 @@ class TestAllMethods(unittest.TestCase):
         self.assertEqual(c, [('Teden Mengi', 'Defence', 2002)])
     
     # test extra credit
-    def test_make_winners_table(self):
-        self.cur2.execute('SELECT * from Winners')
-        winners_list = self.cur2.fetchall()
+    # def test_make_winners_table(self):
+    #     self.cur2.execute('SELECT * from Winners')
+    #     winners_list = self.cur2.fetchall()
 
-        pass
+    #     pass
 
-    def test_make_seasons_table(self):
-        self.cur2.execute('SELECT * from Seasons')
-        seasons_list = self.cur2.fetchall()
+    # def test_make_seasons_table(self):
+    #     self.cur2.execute('SELECT * from Seasons')
+    #     seasons_list = self.cur2.fetchall()
 
-        pass
+    #     pass
 
-    def test_winners_since_search(self):
+    # def test_winners_since_search(self):
 
-        pass
+    #     pass
 
 
 def main():
