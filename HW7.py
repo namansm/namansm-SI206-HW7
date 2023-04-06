@@ -133,8 +133,14 @@ def birthyear_nationality_search(age, country, cur, conn):
     # HINT: You'll have to use JOIN for this task.
 
 def position_birth_search(position, age, cur, conn):
-       pass
+    year = 2023 - age
 
+    players = []
+
+    cur.execute("SELECT pl.name, pos.position, pl.birthyear FROM Players pl INNER JOIN Positions pos ON pl.position_id = pos.id WHERE pos.position = ? AND birthyear > ?", (position,year,))
+    players = cur.fetchall()
+
+    return players
 
 # [EXTRA CREDIT]
 # You’ll make 3 new functions, make_winners_table(), make_seasons_table(),
